@@ -44,12 +44,15 @@ string openFile(){      // opens a file and returns the file as a string
 }
 
 int main() {
-    string fileStr = openFile();
-    cout << fileStr << endl;
+    // string fileStr = openFile();
+    // cout << fileStr << endl;
     
-    string rm = removeWhiteSpace(fileStr);
+    // string rm = removeWhiteSpace(fileStr);
     
-    cout << rm << endl;
+    // cout << rm << endl;
+    
+    string quote = "\"";
+    cout << quote;
     
     return 0;
 }
