@@ -13,14 +13,17 @@ string removeWhiteSpace(const string original) {
     pos = modified.find(' ', pos); //find first position of white space, if any
     
     while(pos != string::npos) { 
-        modified.replace(pos, 1, ''); //get rid of white space
-        pos--;
+        modified.replace(pos, 1, ""); //get rid of white space
+        if(pos > 0) {
+            pos--;
+        }
         pos = modified.find(' ', pos);
     }
+    return modified;
 }
 
 int main() {
-    string test = "sajfs dskflsf sdkfsaskdfljselrwee dskfjsalf";
+    string test = " test 1 dksfkj nnkb ";
     string modified = removeWhiteSpace(test);
     cout << "Original string: " << test << endl;
     cout << "String with white space removed: " << modified << endl;
