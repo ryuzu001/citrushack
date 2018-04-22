@@ -7,5 +7,6 @@ test:
 	$(CC) $(FLAGS) test.cpp -o $(EXEC)
 clean:
 	rm -f format
-	rm -f test_formatted.txt
+	rm -f a_formatted
+	rm -f b_formatted
 	rm -f a.out

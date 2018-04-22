@@ -24,8 +24,6 @@ string removeWhiteSpace(const string original) {
         pos = modified.find(' ', pos);
     }
     
-    // modified = removeNewlines(modified);
-    
     return modified;
 }
 
@@ -51,7 +49,9 @@ string removeNewlines(const string original){
         pos = modified.find('\n', pos);
         
     }
-    ss << lastLine;                                             // last lastLine
+    lastLine = modified.substr(last_pos, modified.size() - last_pos);
+    
+    ss << lastLine;
     
     return ss.str();
 }
@@ -100,6 +100,7 @@ string preserveQuotes(string str){      // only accounts for one " " in the file
     string quotation = "\"";    // quotation "
     size_t pos = str.find(quotation);
     size_t pos2 = 0; 
+    size_t temp = 0;
     p1 = str.substr(0,pos);  // from start of string to first "
     p1 = removeWhiteSpace(p1);
     returnStuff += p1;
@@ -108,19 +109,19 @@ string preserveQuotes(string str){      // only accounts for one " " in the file
         while(pos != string::npos){
             pos2 = str.find(quotation, pos + 1);     // find second quotation
             p2 = str.substr(pos, pos2 - pos);        // preserve between "
-            // part3 = str.substr(pos2, str.size() - 1);
-            // part3 = removeWhiteSpace(part3);        // 2nd " to end
             returnStuff += p2;                       // add it to returnStuff
             
-            // cout << "pos: " << pos << " pos2: " << pos2 << "\n";
-            
-            pos = str.find(quotation, pos2 + 1);
-            
-            p3 = str.substr(pos2, pos - pos2);
-            p3 = removeWhiteSpace(p3);
+            temp = pos;
+            pos = str.find(quotation, pos2 + 1);        // next quotation
+            if(pos == string::npos){                    // check if theres no next quotation
+                pos = temp;
+                break;
+            }
+            p3 = str.substr(pos2, pos - pos2);          // between current and next quotation, 
+            p3 = removeWhiteSpace(p3);                  // not in quote, so remove whitespace.
             returnStuff += p3;
         }
-        p4 = str.substr(pos2, str.size() - 1);
+        p4 = str.substr(pos2, str.size() - pos);
         p4 = removeWhiteSpace(p4);
         returnStuff += p4;
     }
@@ -131,24 +132,103 @@ string preserveQuotes(string str){      // only accounts for one " " in the file
 }
 
 string format(const string &s) {
+    int numTabs = 0;
     string str = s;
     for(unsigned p = 0; p < str.length(); p++) {
+        
+        if(p + 1 >= str.size()){     // last } in the file
+            str.erase(p - 1, 1);
+            return str;
+        }
+        
+        
+        if((str.at(p) == '*') || (str.at(p) == '+') || 
+           (str.at(p) == '-') || 
+           (str.at(p) == '=') || (str.at(p) == '|') ||
+           (str.at(p) == '%') || (str.at(p) == '&')){       // spaces before all operators
+            str.insert(p - 1, " ");
+            p++;
+        }
         if(str.at(p) == '>') {
-            if(isalpha(str.at(p + 1))) {
+            
+            if(str.at(p + 1) == 'i' && str.at(p + 2) == 'n' && str.at(p + 3) == 't'){       // #include<vector>intmain()...
+                str.insert(p + 1, "\n");
+            }
+            else if(str.at(p + 1) == '/'){       // literally a "//" comment
+                // do nothing
+            }
+            else if(str.at(p + 1) == '>'){  // cin>>temp;
+                str.insert(p, " ");
+                p++;
+                str.insert(p + 2, " ");
+                
+            }
+            else if(isalnum(str.at(p + 1))){    // vector<int>var;
                 str.insert(p + 1, " ");
             }
-            else{
-                str.insert(p + 1,"\n");
+            else if (str.at(p + 1) == '*'){     // array<double>*temp;
+                str.insert(p + 2, " ");
+            }
+            else{                               // default: newline
+                str.insert(p + 1, "\n");
             }
         }
-        // else if(str.at(p) == '{') {
-        //     if(isalpha(str.at(p + 1))) {
-        //         str.insert(p + 1, " ");
-        //     }
-        //     else{
-        //         str.insert(p + 1,"\n");
-        //     }
-        // }
+        
+        if(str.at(p) == '<'){
+            if(str.at(p + 1) == '<'){       // cout << hello
+                str.insert(p, " ");
+                p++;
+                str.insert(p + 2, " ");
+            }
+            else if(str.at(p - 7) == 'i' && str.at(p - 6) == 'n' &&
+                    str.at(p - 5) == 'c' && str.at(p - 4) == 'l' &&
+                    str.at(p - 3) == 'u' && str.at(p - 2) == 'd' &&
+                    str.at(p - 1) == 'e')
+        }
+        
+        if(str.at(p) == '}') {
+            numTabs--;
+            
+            // this can cause an out of range error if its the last } in the file, just default to a newline
+            
+            
+            if(str.at(p + 1) == ';') { // };
+                
+            }
+            else if(str.at(p + 1) == 'w' && str.at(p + 2) == 'h' 
+                 && str.at(p + 3) == 'i' && str.at(p + 4) == 'l'  
+                 && str.at(p + 4) == 'e') { // } while(condition);
+                str.insert(p + 1, " ");
+            }
+            else {
+                str.insert(p + 1, "\n");
+            }
+        }
+        
+        if(str.at(p) == ';'){
+            str.insert(p + 1, "\n");
+        }
+        
+        if(str.at(p) == 'i' && str.at(p + 1) == 'n' && str.at(p + 2) == 't'){       // int ...
+            str.insert(p + 3, " ");
+        }
+        
+        if(str.at(p) == '{'){       // {
+            numTabs++;
+            str.insert(p + 1, "\n");
+        }
+        
+        // return
+        if(str.at(p) == 'r' && str.at(p + 1) == 'e' && str.at(p + 2) == 't' && 
+           str.at(p + 3) == 'u' && str.at(p + 4) == 'r' && str.at(p + 5) == 'n'){
+            str.insert(p + 6, " ");
+        }
+        if(str.at(p) == '\n'){
+            for(int i = 0; i < numTabs; i++){
+                str.insert(p + 1, "\t");
+            }
+        }
+        
     }
     return str;
 }
@@ -163,7 +243,7 @@ string removeAllWhitespace(){
 int main() {
     string t = removeAllWhitespace();
     
-    // t = format(t);
+    t = format(t);
     
     writeFile(t);
     return 0;
