@@ -4,8 +4,8 @@
 #include <vector>#include                   <string>     //   #include    <iostream>
 #include<cassert>#include<cstdio>#include<cstring>
                        
-                       int main(int argc, char* argv[]) {string inputName = ""; //input file's name
-                       string outputName=""; //output file's name
+                       int main(int argc, char* argv[]) {string inputName = "EPIC FUNCTION NAME AYY"; //input file's name
+                       string outputName="YESH AYYY LMAAAAAOOOOOO"; //output file's name
     
     
     
@@ -80,7 +80,7 @@ ofs.open(outputName.c_str(), fstream::trunc | fstream::out);
         }
         while((ifs.peek() != '\n') && (ifs >> c));
         
-        cout << "TEST CASE: " << testCaseNum << endl << endl;ofs << "TEST CASE: " << testCaseNum << endl << endl;
+        cout << "T E S T C A S E: " << testCaseNum << endl << endl;ofs << "TEST CASE: " << testCaseNum << endl << endl;
         prettyprint(obt.getRoot(), " ", " <");  
         //print the OBTree
         

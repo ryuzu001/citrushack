@@ -2,11 +2,12 @@
 #include <fstream>
 #include <string>
 #include <sstream>
-#include <algorithm>
 #include <stdlib.h>
 #include <streambuf>
 
 using namespace std;
+
+string nof = "";        // global variable - name of file
 
 string removeNewlines(const string);
 
@@ -27,43 +28,35 @@ string removeWhiteSpace(const string original) {
     
     return modified;
 }
+
 string removeNewlines(const string original){
     string lastLine = "";
     size_t last_pos = 0;
     string modified = original;
     size_t temp;
-    size_t pos = modified.find('\n', 0);
+    size_t pos = modified.find('\n', 0);                        // find first newline character
     
     stringstream ss;
     while(pos != string::npos){
-        lastLine = modified.substr(last_pos, pos - last_pos);
+        lastLine = modified.substr(last_pos, pos - last_pos);   // last line of code before newline
         ss << lastLine;
-        temp = lastLine.find("//");
-        if(temp != string::npos){   // contains a comment
-            // cout << "comment!";
-            // exit(0);
-            
-            // modified.replace(pos, 0, "\n");
+        temp = lastLine.find("//");                             // scan through looking for comments
+        if(temp != string::npos){                               // contains a comment - newline
             ss << "\n";
         }
-        else{
+        else{                                                   // does not contain a comment - no newline
             modified.replace(pos, 1, "");
         }
-        last_pos = pos;
+        last_pos = pos;                                         // update pos and last_pos
         pos = modified.find('\n', pos);
         
     }
-    ss << lastLine;
+    ss << lastLine;                                             // last lastLine
     
-    // std::ofstream out("output.txt");
-    // out << ss.str();
-    // out.close();
     return ss.str();
 }
 
 string openFile(){      // opens a file and returns the file as a string
-
-    string nof = "";
     stringstream buffer;
     cout << "Enter the name of a file\n";
     getline(cin, nof);
@@ -82,24 +75,54 @@ string openFile(){      // opens a file and returns the file as a string
     }
 }
 
+void writeFile(string str){                 // writes file
+    string formatted = "_formatted";        // formatted string
+    string nof_f;
+    size_t per = nof.find(".");             // file extension
+    if(per != string::npos){
+        nof_f = nof.substr(0, per) + formatted + nof.substr(per, nof.size() - per);
+    }
+    else{
+        nof_f = nof + formatted;      // nameoffile_formatted       w/ no extension
+    }
+    
+    ofstream out(nof_f.c_str());             // actual write process
+    out << str;
+    out.close();
+}
+
 string preserveQuotes(string str){      // only accounts for one " " in the file though
-    string returnStuff;
+    string returnStuff = "";
+    string p1 = "";
+    string p2 = "";
+    string p3 = "";
+    string p4 = "";
     string quotation = "\"";    // quotation "
     size_t pos = str.find(quotation);
+    size_t pos2 = 0; 
+    p1 = str.substr(0,pos);  // from start of string to first "
+    p1 = removeWhiteSpace(p1);
+    returnStuff += p1;
+    
     if(pos != string::npos){    // found
-        size_t pos2 = str.find(quotation, pos + 1);
-        if(pos2 != string::npos){
-            string part1, part2, part3;
-            part1 = str.substr(0, pos);                 // from start of string to first "
-            part1 = removeWhiteSpace(part1);
-            part2 = str.substr(pos, pos2 - pos);        // preserve between "
-            part3 = str.substr(pos2, str.size() - 1);
-            part3 = removeWhiteSpace(part3);        // 2nd " to end
-            returnStuff = part1 + part2 + part3;
+        while(pos != string::npos){
+            pos2 = str.find(quotation, pos + 1);     // find second quotation
+            p2 = str.substr(pos, pos2 - pos);        // preserve between "
+            // part3 = str.substr(pos2, str.size() - 1);
+            // part3 = removeWhiteSpace(part3);        // 2nd " to end
+            returnStuff += p2;                       // add it to returnStuff
+            
+            // cout << "pos: " << pos << " pos2: " << pos2 << "\n";
+            
+            pos = str.find(quotation, pos2 + 1);
+            
+            p3 = str.substr(pos2, pos - pos2);
+            p3 = removeWhiteSpace(p3);
+            returnStuff += p3;
         }
-        else{
-            cout << "only one quotation, error";
-        }
+        p4 = str.substr(pos2, str.size() - 1);
+        p4 = removeWhiteSpace(p4);
+        returnStuff += p4;
     }
     else{   // no quotations
         return str;
@@ -107,23 +130,43 @@ string preserveQuotes(string str){      // only accounts for one " " in the file
     return returnStuff;
 }
 
-string addWhiteSpace(const string );
+string format(const string &s) {
+    string str = s;
+    for(unsigned p = 0; p < str.length(); p++) {
+        if(str.at(p) == '>') {
+            if(isalpha(str.at(p + 1))) {
+                str.insert(p + 1, " ");
+            }
+            else{
+                str.insert(p + 1,"\n");
+            }
+        }
+        // else if(str.at(p) == '{') {
+        //     if(isalpha(str.at(p + 1))) {
+        //         str.insert(p + 1, " ");
+        //     }
+        //     else{
+        //         str.insert(p + 1,"\n");
+        //     }
+        // }
+    }
+    return str;
+}
+
+string removeAllWhitespace(){
+	string t = openFile();
+	t = removeNewlines(t);
+	t = preserveQuotes(t);
+	return t;
+}
 
 int main() {
-    string fileStr = openFile();
-    // cout << fileStr << endl;
+    string t = removeAllWhitespace();
     
-    // cout << "------------------------------------------\n";
+    // t = format(t);
     
-    // string rm = preserveQuotes(fileStr);
-    
-    // cout << rm << endl;
-    
-    // cout << "------------------------------------------\n";
-    
-    string rm2 = removeNewlines(fileStr);
-    
-    cout << rm2 << endl;
-    
+    writeFile(t);
     return 0;
 }
+
+
