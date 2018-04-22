@@ -91,7 +91,7 @@ void writeFile(string str){                 // writes file
     out.close();
 }
 
-string preserveQuotes(string str){      // only accounts for one " " in the file though
+string preserveQuotes(string str){      // preserves quotes, and any comment //
     string returnStuff = "";
     string p1 = "";
     string p2 = "";
@@ -141,13 +141,49 @@ string format(const string &s) {
             return str;
         }
         
+        if(str.at(p) == '=') {
+            if(str.at(p + 1) == '=') {
+                str.insert(p + 2, " ");
+            }
+            else {
+                str.insert(p, " ");
+                p++;
+                str.insert(p + 1, " ");
+            }
+        }
         
-        if((str.at(p) == '*') || (str.at(p) == '+') || 
-           (str.at(p) == '-') || 
-           (str.at(p) == '=') || (str.at(p) == '|') ||
-           (str.at(p) == '%') || (str.at(p) == '&')){       // spaces before all operators
-            str.insert(p - 1, " ");
+        if(str.at(p) == '*') { //not needed rn
+            // if(isdigit(str.at(p + 1))) {
+            //     str.insert(p + 1, " ");
+            // }
+            // if(str.at(p - 1) == ' ') {
+            //     str.insert(p, " ");
+            //     p++;
+            // }
+        } 
+        
+        // && || 
+        
+        if(str.at(p) == '&' && str.at(p + 1) == '&'){
+            str.insert(p, " ");
             p++;
+            str.insert(p + 2, " ");
+        }
+        
+        if(str.at(p) == '|' && str.at(p + 1) == '|'){
+            str.insert(p, " ");
+            p++;
+            str.insert(p + 2, " ");
+        }
+        
+        
+        // if(str.at(p) == '-') {
+            
+        // }
+        if(str.at(p) == '%'){       // spaces before all operators
+            str.insert(p, " ");
+            p++;
+            str.insert(p + 1, " ");
         }
         if(str.at(p) == '>') {
             
@@ -155,7 +191,7 @@ string format(const string &s) {
                 str.insert(p + 1, "\n");
             }
             else if(str.at(p + 1) == '/'){       // literally a "//" comment
-                // do nothing
+                str.insert(p + 1, "\t");
             }
             else if(str.at(p + 1) == '>'){  // cin>>temp;
                 str.insert(p, " ");
@@ -163,15 +199,21 @@ string format(const string &s) {
                 str.insert(p + 2, " ");
                 
             }
-            else if(isalnum(str.at(p + 1))){    // vector<int>var;
+            else if(isalpha(str.at(p + 1))){    // vector<int>temp; 
                 str.insert(p + 1, " ");
             }
             else if (str.at(p + 1) == '*'){     // array<double>*temp;
-                str.insert(p + 2, " ");
+                str.insert(p + 1, " ");
             }
-            else{                               // default: newline
+            else if(str.at(p + 1) == '#'){                               // top headers, #include
                 str.insert(p + 1, "\n");
             }
+            else if(isdigit(str.at(p + 1))){         //if(argc>1){
+                str.insert(p + 1, " ");
+                str.insert(p, " ");
+                p++;
+            }
+            
         }
         
         if(str.at(p) == '<'){
@@ -183,11 +225,15 @@ string format(const string &s) {
             else if(str.at(p - 7) == 'i' && str.at(p - 6) == 'n' &&
                     str.at(p - 5) == 'c' && str.at(p - 4) == 'l' &&
                     str.at(p - 3) == 'u' && str.at(p - 2) == 'd' &&
-                    str.at(p - 1) == 'e')
+                    str.at(p - 1) == 'e') {
+                str.insert(p, " ");
+            }
         }
         
         if(str.at(p) == '}') {
             numTabs--;
+            str.erase(p - 1, 1);        // get rid of the tab before the }
+            p--;
             
             // this can cause an out of range error if its the last } in the file, just default to a newline
             
@@ -205,7 +251,7 @@ string format(const string &s) {
             }
         }
         
-        if(str.at(p) == ';'){
+        if(str.at(p) == ';' && str.at(p + 1) != '\n'){
             str.insert(p + 1, "\n");
         }
         
@@ -227,6 +273,19 @@ string format(const string &s) {
             for(int i = 0; i < numTabs; i++){
                 str.insert(p + 1, "\t");
             }
+        }
+        
+        if(str.at(p) == ',') {
+            str.insert(p + 1, " ");
+        }
+        
+        if(str.at(p) == 'c' && str.at(p + 1) == 'h' && str.at(p + 2) == 'a' && str.at(p + 3) == 'r' && str.at(p + 4) != ' '){
+            str.insert(p + 4, " ");
+        }
+        
+        if(str.at(p) == 'd' && str.at(p + 1) == 'o' && str.at(p + 2) == 'u' && str.at(p + 3) == 'b'
+        && str.at(p + 4) == 'l' && str.at(p + 5) == 'e' && str.at(p + 6) != '>'){
+            str.insert(p + 6, " ");
         }
         
     }

@@ -9,4 +9,6 @@ clean:
 	rm -f format
 	rm -f a_formatted
 	rm -f b_formatted
+	rm -f c_formatted
+	rm -f d_formatted
 	rm -f a.out

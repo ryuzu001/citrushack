@@ -1,0 +1,1 @@
+#include<iostream>intmain(){std::cout<<"Hello World!";return0;}
