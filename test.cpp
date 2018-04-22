@@ -90,59 +90,156 @@ void writeFile(string str){                 // writes file
     out << str;
     out.close();
 }
-
-string preserveQuotes(string str){      // preserves quotes, and any comment //
+string nocomments(string str){      
     string returnStuff = "";
-    string p1Quote = "";
-    string p1Comment = "";
+    string p1 = "";
+    string p2 = "";
+    string p3 = "";
+    string p4 = "";
+    string quotation = "\"";    // quotation "
+    size_t pos = str.find(quotation);
+    size_t pos2 = 0; 
+    size_t temp = 0;
+    p1 = str.substr(0,pos);  // from start of string to first "
+    p1 = removeWhiteSpace(p1);
+    returnStuff += p1;
+    
+    if(pos != string::npos){    // found
+        while(pos != string::npos){
+            pos2 = str.find(quotation, pos + 1);     // find second quotation
+            p2 = str.substr(pos, pos2 - pos);        // preserve between "
+            returnStuff += p2;                       // add it to returnStuff
+            
+            temp = pos;
+            pos = str.find(quotation, pos2 + 1);        // next quotation
+            if(pos == string::npos){                    // check if theres no next quotation
+                pos = temp;
+                break;
+            }
+            p3 = str.substr(pos2, pos - pos2);          // between current and next quotation, 
+            p3 = removeWhiteSpace(p3);                  // not in quote, so remove whitespace.
+            returnStuff += p3;
+        }
+        p4 = str.substr(pos2, str.size() - pos);
+        p4 = removeWhiteSpace(p4);
+        returnStuff += p4;
+    }
+    else{   // no quotations
+        return str;
+    }
+    return returnStuff;
+}
+string nostrings(string str){    
+    string returnStuff = "";
+    string p1 = "";
+    string p2 = "";
+    string p3 = "";
+    string p4 = "";
+    string co = "//";    // comment
+    string nl = "\n";
+    size_t pos = str.find(co);
+    size_t pos2 = 0; 
+    size_t temp = 0;
+    p1 = str.substr(0,pos);  // from start of string to comment
+    p1 = removeWhiteSpace(p1);
+    returnStuff += p1;
+    
+    if(pos != string::npos){    // found
+        while(pos != string::npos){
+            pos2 = str.find(nl, pos + 1);     // find second quotation
+            p2 = str.substr(pos, pos2 - pos);        // preserve between "
+            returnStuff += p2;                       // add it to returnStuff
+            
+            temp = pos;
+            pos = str.find(co, pos2 + 1);        // next quotation
+            if(pos == string::npos){                    // check if theres no next quotation
+                pos = temp;
+                break;
+            }
+            p3 = str.substr(pos2, pos - pos2);          // between current and next quotation, 
+            p3 = removeWhiteSpace(p3);                  // not in quote, so remove whitespace.
+            returnStuff += p3;
+        }
+        p4 = str.substr(pos2, str.size() - pos);
+        p4 = removeWhiteSpace(p4);
+        returnStuff += p4;
+    }
+    else{   // no quotations
+        return str;
+    }
+    return returnStuff;
+}
+string preserveQuotes(string str){      // preserves quotes, and any comment // minor bug, prints p2 or p3 again at the end...
+    string returnStuff = "";
+    string p1 = "";
     string p2 = "";
     string p3 = "";
     string p4 = "";
     string quotation = "\"";    // quotation "
     string newline = "\n";
     string comment = "//";       // comment //
-    size_t commentstart = str.find(comment);
-    size_t commentend = 0;
-    size_t quotestart = str.find(quotation);
-    size_t quoteend = 0; 
     
-    if(commentstart < quotestart){      // comment before quote - comment gets priority
-        p1Comment = str.substr(0, commentstart);
-        p1Comment = removeWhiteSpace(p1Comment);
-        returnStuff += p1Comment;
+    size_t cnl, cQ;
+    
+    size_t commentSlash = str.find(comment);
+    size_t commentNewline = str.find(newline);
+    size_t openQ = str.find(quotation);
+    
+    size_t closedQ = str.find(quotation, openQ + 1); 
+    
+    // if(commentSlash == string::npos){
+        
+    //     return nocomments(str);
+    // }
+    // if(openQ == string::npos){
+    //     return nostrings(str);
+    // }
+    
+    if(commentSlash < openQ){       //comment first
+        p1 = str.substr(0, commentSlash);
     }
-    else{
-        p1Quote = str.substr(0, quotestart);  // from start of string to first "
-        p1Quote = removeWhiteSpace(p1Quote);
-        returnStuff += p1Quote;
+    else{                           // quote first
+        p1 = str.substr(0, openQ);
     }
-    if(quoteend != string::npos && commentend != string::npos){    // found
-        while(quoteend != string::npos || commentend != string::npos){
-            if(commentstart < quotestart){          //comment comes first
-                commentend = str.find(newline, commentstart + 1);        // pos2Comment is the end of the comment - newline
-                p2 = str.substr(commentstart, commentend - commentstart);   // preserve comment, from // to newline
-                commentstart = str.find(comment, commentend + 1);
-                p3 = str.substr(commentend, quotestart - commentend); 
+    returnStuff += removeWhiteSpace(p1);
+    
+    
+    while((commentSlash != string::npos && openQ != string::npos)){
+        if(commentSlash < openQ){   // comment first
+            p2 = str.substr(commentSlash, commentNewline - commentSlash);       // comment
+            
+            cnl = commentNewline;
+            commentSlash = str.find(comment, commentNewline + 1);                   // update values
+            commentNewline = str.find(newline, commentNewline + 1);
+            if(openQ > commentSlash){
+                p3 = str.substr(cnl, commentSlash - cnl);
             }
             else{
-                quoteend = str.find(quotation, quotestart + 1) + 1;          // pos2Quote pointing to the second quotation now
-                p2 = str.substr(quotestart, quoteend - quotestart);           // preserve between "                                       // add it to returnStuff
-                quotestart = str.find(quotation, quoteend + 1);
-                p3 = str.substr(quoteend, commentstart - quoteend);
+                p3 = str.substr(cnl, openQ - cnl);            // whichever one is smaller
             }
-            if((quotestart == string::npos) && (commentstart == string::npos)){
-                break;
-            }
-            
-            returnStuff += p2;
-            
-            p3 = removeWhiteSpace(p3);
-            returnStuff += p3;
         }
-    }
-    else{   // no quotations
-        cout << "hahha lol nope";
-        return str;
+        else{                       // quote first
+            p2 = str.substr(openQ, closedQ - openQ);                            // quote
+            
+            cQ = closedQ;
+            openQ = str.find(quotation, closedQ + 1);                               // update values
+            closedQ = str.find(quotation, openQ + 1);
+            if(commentSlash > openQ){
+                p3 = str.substr(cQ, openQ - cQ);
+            }
+            else{
+                p3 = p3 = str.substr(cQ, commentSlash - cQ);
+            }
+        }
+        if(!(commentSlash != string::npos && openQ != string::npos)){
+            break;
+        }
+            
+        returnStuff += p2;
+        returnStuff += removeWhiteSpace(p3);
+        
+        p2 = "";
+        p3 = "";
     }
     return returnStuff;
 }

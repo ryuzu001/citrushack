@@ -1,0 +1,12 @@
+#include
+<iostream>
+
+int main(){
+    // here is a program with no string declarations
+    
+    // only comments here guys
+    
+    // nothing suspicious at all
+    
+    return 0;
+}

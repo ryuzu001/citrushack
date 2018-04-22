@@ -91,7 +91,7 @@ void writeFile(string str){                 // writes file
     out.close();
 }
 
-string preserveQuotes(string str){      // preserves quotes, and any comment //
+string preserveQuotes(string str){      // preserves quotes, and any comment //   (jk not the comment thing - too hard see test.cpp)
     string returnStuff = "";
     string p1 = "";
     string p2 = "";
@@ -130,6 +130,80 @@ string preserveQuotes(string str){      // preserves quotes, and any comment //
     }
     return returnStuff;
 }
+// string preserveQuotes(string str){      // preserves quotes, and any comment //
+//     string returnStuff = "";
+//     string p1 = "";
+//     string p2 = "";
+//     string p3 = "";
+//     string p4 = "";
+//     string quotation = "\"";    // quotation "
+//     string newline = "\n";
+//     string comment = "//";       // comment //
+    
+//     size_t cnl, cQ;
+    
+//     size_t commentSlash = str.find(comment);
+//     size_t commentNewline = str.find(newline);
+//     size_t openQ = str.find(quotation);
+    
+//     size_t closedQ = str.find(quotation, openQ + 1); 
+    
+//     // if(commentSlash == string::npos){
+        
+//     //     return nocomments(str);
+//     // }
+//     // if(openQ == string::npos){
+//     //     return nostrings(str);
+//     // }
+    
+//     if(commentSlash < openQ){       //comment first
+//         p1 = str.substr(0, commentSlash);
+//     }
+//     else{                           // quote first
+//         p1 = str.substr(0, openQ);
+//     }
+//     p1 = removeWhiteSpace(p1);
+//     returnStuff += p1;
+    
+    
+//     while(1){
+//         if(commentSlash < openQ){   // comment first
+//             p2 = str.substr(commentSlash, commentNewline - commentSlash);       // comment
+            
+//             cnl = commentNewline;
+//             commentSlash = str.find(comment, commentNewline + 1);                   // update values
+//             commentNewline = str.find(newline, commentNewline + 1);
+//             if(openQ > commentSlash){
+//                 p3 = str.substr(cnl, commentSlash - cnl);
+//             }
+//             else{
+//                 p3 = str.substr(cnl, openQ - cnl);            // whichever one is smaller
+//             }
+//         }
+//         else{                       // quote first
+//             p2 = str.substr(openQ, closedQ - openQ);                            // quote
+            
+//             cQ = closedQ;
+//             openQ = str.find(quotation, closedQ + 1);                               // update values
+//             closedQ = str.find(quotation, openQ + 1);
+//             if(commentSlash > openQ){
+//                 p3 = str.substr(cQ, openQ - cQ);
+//             }
+//             else{
+//                 p3 = p3 = str.substr(cQ, commentSlash - cQ);
+//             }
+//         }
+//         if((commentSlash == string::npos && openQ == string::npos))
+//         // if((commentSlash > 9999 || openQ > 9999))
+//             break;
+        
+//         returnStuff += p2;
+//         p3 = removeWhiteSpace(p3);
+//         returnStuff += p3;
+//     }
+//     return returnStuff;
+// }
+
 
 string format(const string &s) {
     int numTabs = 0;
@@ -150,7 +224,8 @@ string format(const string &s) {
             else if(!(str.at(p - 1) == '=' || str.at(p - 1) == '<'
                   || str.at(p - 1) == '>' || str.at(p - 1) == '+'
                   || str.at(p - 1) == '-' || str.at(p - 1) == '*'
-                  || str.at(p - 1) == '/' || str.at(p - 1) == '%')) {
+                  || str.at(p - 1) == '/' || str.at(p - 1) == '%'
+                  || str.at(p - 1) == '!')) {
                 if(str.at(p + 1) != ' ') {
                     str.insert(p, " ");
                     p++;
@@ -226,6 +301,10 @@ string format(const string &s) {
             }
         }
         
+        // if(str.at(p) == '!') {
+        //     str.insert(p, " ")
+        // }
+        
         if(str.at(p) == '&' && str.at(p + 1) == '&'){ //&&
             str.insert(p, " ");
             p++;
@@ -257,6 +336,9 @@ string format(const string &s) {
                 str.insert(p, " ");
                 p++;
                 str.insert(p + 2, " ");
+                
+            }
+            else if(isalpha(str.at(p + 1)) && str.at(p - 1) == '-') {
                 
             }
             else if(isalpha(str.at(p + 1))){    // vector<int>temp; 
@@ -348,6 +430,11 @@ string format(const string &s) {
             str.insert(p + 6, " ");
         }
         
+        if(str.at(p) == ')') {
+            if(isalpha(str.at(p + 1))) {
+                str.insert(p + 1, " ");
+            }
+        }
     }
     return str;
 }

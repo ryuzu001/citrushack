@@ -1,0 +1,9 @@
+#include <iostream>
+int main(){
+	//thisfunctionprint shello
+	cout << "Hello world!" << endl;
+	//return safterprint inggoodbyeint wolanguages.
+	cout << "goodbye!" << endl;
+	cout << "adios amigos!" << endl;
+	return 0;
+}

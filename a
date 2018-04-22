@@ -75,25 +75,28 @@ ofs.open(outputName.c_str(), fstream::trunc | fstream::out);
         {
             obt.insert(c);
             avlt.insert(c);
-            // HB_Node<double>* temp = new HB_Node<double>(c, 0, 0, 0, 0, 0);
-            // hbt.insert(temp, hbt.getRoot());
+            // HB_Node<double>* temp =              new HB_Node<double>(c, 0, 0, 0, 0, 0);
+            // hbt.insert(temp, hbt.ge  tRoot());
         }
-        while((ifs.peek() != '\n') && (ifs >> c));
+        while((ifs.peek() !         = '\n') &&        (ifs               >> c));
+            
+        cout << "T E S T C A S E: " << testCas      
         
-        cout << "T E S T C A S E: " << testCaseNum << endl << endl;ofs << "TEST CASE: " << testCaseNum << endl << endl;
-        prettyprint(obt.getRoot(), " ", " <");  
-        //print the OBTree
+            eNum << endl << endl;ofs << "TEST CASE: " << testCaseNum << endl << endl;
+            prettyprin  t(obt.getRoot(), " ", " <");  
+            //print the OBTree
         
                                 cout << endl;
-        ofs << endl;
+            ofs << endl;
         
         
-            prettyprint(avlt.getRoot(), " ", " <");     //print the AVLTree
-        cout << endl;
-        ofs << endl;
-        // prettyprint(hbt.getRoot(), " ", " <");  //print the HBTree
-        // cout << endl;
+            prettyprint(avlt.ge         
+                        tRoot(), " ", " <");     //print the AVLTree
+            cout << endl;
+            ofs << endl;
+            // prett        yprint(hbt.getRoot(), " ", " <");  //print the HBTree
+            // cout << endl;
                         // ofs << endl;
-        ++testCaseNum;  //increment test case number
+        ++testCaseN         um;  //increme      nt test case number
     }
 }
