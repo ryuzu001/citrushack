@@ -1,6 +1,7 @@
 CC = g++
+FLAGS = -Wall -Werror -ansi -pedantic
 EXEC=format
 all:
-	$(CC) main.cpp -o $(EXEC)
+	$(CC) $(FLAGS) main.cpp -o $(EXEC)
 clean:
 	rm -f format

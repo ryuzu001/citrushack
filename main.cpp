@@ -108,24 +108,18 @@ string preserveQuotes(string str){      // only accounts for one " " in the file
 
 string addWhiteSpace(const string &s) {
     string str = s;
-    
+    return str;
+}
+
+string removeAllWhitespace(){
+	string t = openFile();
+	t = removeNewlines(t);
+	t = preserveQuotes(t);
+	return t;
 }
 
 int main() {
-    string fileStr = openFile();
-    cout << fileStr << endl;
-    
-    cout << "------------------------------------------\n";
-    
-    string rm = preserveQuotes(fileStr);
-    
-    cout << rm << endl;
-    
-    cout << "------------------------------------------\n";
-    
-    string rm2 = removeNewlines(fileStr);
-    
-    cout << rm2 << endl;
-    
+    string t = removeAllWhitespace();
+    cout << t << endl;
     return 0;
 }
