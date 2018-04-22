@@ -2,10 +2,13 @@
 #include <fstream>
 #include <string>
 #include <sstream>
+#include <algorithm>
 #include <stdlib.h>
 #include <streambuf>
 
 using namespace std;
+
+string removeNewlines(const string);
 
 string removeWhiteSpace(const string original) {
     string modified = original; //copy original string
@@ -19,7 +22,43 @@ string removeWhiteSpace(const string original) {
         }
         pos = modified.find(' ', pos);
     }
+    
+    // modified = removeNewlines(modified);
+    
     return modified;
+}
+string removeNewlines(const string original){
+    string lastLine = "";
+    size_t last_pos = 0;
+    string modified = original;
+    size_t temp;
+    size_t pos = modified.find('\n', 0);
+    
+    stringstream ss;
+    while(pos != string::npos){
+        lastLine = modified.substr(last_pos, pos - last_pos);
+        ss << lastLine;
+        temp = lastLine.find("//");
+        if(temp != string::npos){   // contains a comment
+            // cout << "comment!";
+            // exit(0);
+            
+            // modified.replace(pos, 0, "\n");
+            ss << "\n";
+        }
+        else{
+            modified.replace(pos, 1, "");
+        }
+        last_pos = pos;
+        pos = modified.find('\n', pos);
+        
+    }
+    ss << lastLine;
+    
+    // std::ofstream out("output.txt");
+    // out << ss.str();
+    // out.close();
+    return ss.str();
 }
 
 string openFile(){      // opens a file and returns the file as a string
@@ -43,16 +82,48 @@ string openFile(){      // opens a file and returns the file as a string
     }
 }
 
+string preserveQuotes(string str){      // only accounts for one " " in the file though
+    string returnStuff;
+    string quotation = "\"";    // quotation "
+    size_t pos = str.find(quotation);
+    if(pos != string::npos){    // found
+        size_t pos2 = str.find(quotation, pos + 1);
+        if(pos2 != string::npos){
+            string part1, part2, part3;
+            part1 = str.substr(0, pos);                 // from start of string to first "
+            part1 = removeWhiteSpace(part1);
+            part2 = str.substr(pos, pos2 - pos);        // preserve between "
+            part3 = str.substr(pos2, str.size() - 1);
+            part3 = removeWhiteSpace(part3);        // 2nd " to end
+            returnStuff = part1 + part2 + part3;
+        }
+        else{
+            cout << "only one quotation, error";
+        }
+    }
+    else{   // no quotations
+        return str;
+    }
+    return returnStuff;
+}
+
+string addWhiteSpace(const string );
+
 int main() {
-    // string fileStr = openFile();
+    string fileStr = openFile();
     // cout << fileStr << endl;
     
-    // string rm = removeWhiteSpace(fileStr);
+    // cout << "------------------------------------------\n";
+    
+    // string rm = preserveQuotes(fileStr);
     
     // cout << rm << endl;
     
-    string quote = "\"";
-    cout << quote;
+    // cout << "------------------------------------------\n";
+    
+    string rm2 = removeNewlines(fileStr);
+    
+    cout << rm2 << endl;
     
     return 0;
 }

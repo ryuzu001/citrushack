@@ -7,6 +7,8 @@
 
 using namespace std;
 
+string removeNewlines(const string);
+
 string removeWhiteSpace(const string original) {
     string modified = original; //copy original string
     size_t pos = 0; //position of white space
@@ -20,15 +22,42 @@ string removeWhiteSpace(const string original) {
         pos = modified.find(' ', pos);
     }
     
-    pos = modified.find('\n', 0); //find first position of white space, if any
-    while(pos != string::npos) { 
-        modified.replace(pos, 1, ""); //get rid of white space
-        if(pos > 1) {
-            pos -= 2;
-        }
-        pos = modified.find('\n', pos);
-    }
+    // modified = removeNewlines(modified);
+    
     return modified;
+}
+string removeNewlines(const string original){
+    string lastLine = "";
+    size_t last_pos = 0;
+    string modified = original;
+    size_t temp;
+    size_t pos = modified.find('\n', 0);
+    
+    stringstream ss;
+    while(pos != string::npos){
+        lastLine = modified.substr(last_pos, pos - last_pos);
+        ss << lastLine;
+        temp = lastLine.find("//");
+        if(temp != string::npos){   // contains a comment
+            // cout << "comment!";
+            // exit(0);
+            
+            // modified.replace(pos, 0, "\n");
+            ss << "\n";
+        }
+        else{
+            modified.replace(pos, 1, "");
+        }
+        last_pos = pos;
+        pos = modified.find('\n', pos);
+        
+    }
+    ss << lastLine;
+    
+    // std::ofstream out("output.txt");
+    // out << ss.str();
+    // out.close();
+    return ss.str();
 }
 
 string openFile(){      // opens a file and returns the file as a string
@@ -52,7 +81,7 @@ string openFile(){      // opens a file and returns the file as a string
     }
 }
 
-string preserveQuotes(string str){
+string preserveQuotes(string str){      // only accounts for one " " in the file though
     string returnStuff;
     string quotation = "\"";    // quotation "
     size_t pos = str.find(quotation);
@@ -77,6 +106,11 @@ string preserveQuotes(string str){
     return returnStuff;
 }
 
+string addWhiteSpace(const string &s) {
+    string str = s;
+    
+}
+
 int main() {
     string fileStr = openFile();
     cout << fileStr << endl;
@@ -88,6 +122,10 @@ int main() {
     cout << rm << endl;
     
     cout << "------------------------------------------\n";
+    
+    string rm2 = removeNewlines(fileStr);
+    
+    cout << rm2 << endl;
     
     return 0;
 }
