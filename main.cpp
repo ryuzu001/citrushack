@@ -143,47 +143,107 @@ string format(const string &s) {
         
         if(str.at(p) == '=') {
             if(str.at(p + 1) == '=') {
-                str.insert(p + 2, " ");
-            }
-            else {
                 str.insert(p, " ");
                 p++;
-                str.insert(p + 1, " ");
+                str.insert(p + 2, " ");
+            }
+            else if(!(str.at(p - 1) == '=' || str.at(p - 1) == '<'
+                  || str.at(p - 1) == '>' || str.at(p - 1) == '+'
+                  || str.at(p - 1) == '-' || str.at(p - 1) == '*'
+                  || str.at(p - 1) == '/' || str.at(p - 1) == '%')) {
+                if(str.at(p + 1) != ' ') {
+                    str.insert(p, " ");
+                    p++;
+                    str.insert(p + 1, " ");
+                }
+                
             }
         }
         
-        if(str.at(p) == '*') { //not needed rn
-            // if(isdigit(str.at(p + 1))) {
-            //     str.insert(p + 1, " ");
-            // }
-            // if(str.at(p - 1) == ' ') {
+        if(str.at(p) == '*') { 
+            if((isdigit(str.at(p + 1)) && isalpha(str.at(p - 1))) || 
+               (isdigit(str.at(p - 1)) && isalpha(str.at(p + 1))) ||
+               (isdigit(str.at(p - 1)) && isdigit(str.at(p + 1))) ) { // j*1 or 1*j or 1*1
+                str.insert(p + 1, " ");
+                str.insert(p, " ");
+                p++;
+            }
+            // if(!(str.at(p - 1) == ' ')') {
             //     str.insert(p, " ");
             //     p++;
             // }
         } 
         
-        // && || 
+        if(str.at(p) == '/') {
+            if((isdigit(str.at(p + 1)) && isalpha(str.at(p - 1))) || // j/1
+               (isdigit(str.at(p - 1)) && isalpha(str.at(p + 1))) || // 1/j
+               (isdigit(str.at(p - 1)) && isdigit(str.at(p + 1))) || // 1/1
+               (isalpha(str.at(p - 1)) && isalpha(str.at(p + 1))) || // j/j
+               (str.at(p - 1) == ')' && isalnum(str.at(p + 1))) ||   // )/j or j/(
+               (isalnum(str.at(p - 1)) && str.at(p + 1) == '(')) { 
+                str.insert(p + 1, " ");
+                str.insert(p, " ");
+                p++;
+            }
+        }
         
-        if(str.at(p) == '&' && str.at(p + 1) == '&'){
+        if(str.at(p) == '+') {
+            if((isdigit(str.at(p + 1)) && isalpha(str.at(p - 1))) || // j+1
+               (isdigit(str.at(p - 1)) && isalpha(str.at(p + 1))) || // 1+j
+               (isdigit(str.at(p - 1)) && isdigit(str.at(p + 1))) || // 1+1
+               (isalpha(str.at(p - 1)) && isalpha(str.at(p + 1))) || // j+j
+               (str.at(p - 1) == ')' && isalnum(str.at(p + 1))) ||   // )+j or j+(
+               (isalnum(str.at(p - 1)) && str.at(p + 1) == '(')) { 
+                str.insert(p + 1, " ");
+                str.insert(p, " ");
+                p++;
+            }
+        }
+        
+        if(str.at(p) == '-') {
+            if((isdigit(str.at(p + 1)) && isalpha(str.at(p - 1))) || // j-1
+               (isdigit(str.at(p - 1)) && isalpha(str.at(p + 1))) || // 1-j
+               (isdigit(str.at(p - 1)) && isdigit(str.at(p + 1))) || // 1-1
+               (isalpha(str.at(p - 1)) && isalpha(str.at(p + 1))) || // j-j
+               (str.at(p - 1) == ')' && isalnum(str.at(p + 1))) ||   // )-j or j-(
+               (isalnum(str.at(p - 1)) && str.at(p + 1) == '(')) { 
+                str.insert(p + 1, " ");
+                str.insert(p, " ");
+                p++;
+            }
+        }
+        
+        if(str.at(p) == '%') {
+            if((isdigit(str.at(p + 1)) && isalpha(str.at(p - 1))) || // j%1
+               (isdigit(str.at(p - 1)) && isalpha(str.at(p + 1))) || // 1%j
+               (isdigit(str.at(p - 1)) && isdigit(str.at(p + 1))) || // 1%1
+               (isalpha(str.at(p - 1)) && isalpha(str.at(p + 1))) || // j%j
+               (str.at(p - 1) == ')' && isalnum(str.at(p + 1))) ||   // )%j or j%(
+               (isalnum(str.at(p - 1)) && str.at(p + 1) == '(')) { 
+                str.insert(p + 1, " ");
+                str.insert(p, " ");
+                p++;
+            }
+        }
+        
+        if(str.at(p) == '&' && str.at(p + 1) == '&'){ //&&
             str.insert(p, " ");
             p++;
             str.insert(p + 2, " ");
         }
+        if(str.at(p) == '&' && str.at(p - 1) == '>') { // >& to > &a
+            str.insert(p, " ");
+            p++;
+        }
+        if(str.at(p) == '&' && isalpha(str.at(p - 1))) { // a& b -> a &x
+            str.insert(p, " ");
+            p++;
+        }
         
-        if(str.at(p) == '|' && str.at(p + 1) == '|'){
+        if(str.at(p) == '|' && str.at(p + 1) == '|'){ // ||
             str.insert(p, " ");
             p++;
             str.insert(p + 2, " ");
-        }
-        
-        
-        // if(str.at(p) == '-') {
-            
-        // }
-        if(str.at(p) == '%'){       // spaces before all operators
-            str.insert(p, " ");
-            p++;
-            str.insert(p + 1, " ");
         }
         if(str.at(p) == '>') {
             
