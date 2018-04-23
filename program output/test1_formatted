@@ -1,15 +1,15 @@
 #include <vector>
 #include <iostream>
 #include <vector>
-#include <string>	//   #include    <iostream>
+#include <string>	//#include <iostream>
 #include <cassert>
 #include <cstdio>
 #include <cstring>
 int main(int argc, char *argv[]){
 	stringinputName = "EPIC FUNCTION NAME AYY";
-	//input file's name
+	//inputfile'sname
 	stringoutputName = "YESH AYYY LMAAAAAOOOOOO";
-	//output file's name
+	//outputfile'sname
 	if(argc > 1){
 		cout << "Opening file " << argv[1] << "." << endl;
 		ifs.open(argv[1]);
@@ -18,7 +18,7 @@ int main(int argc, char *argv[]){
 			return 1;
 		}
 		outputName = argv[1];
-		outputName.replace(outputName.length()-3, 3, "out", 0, 3);
+		outputName.replace(outputName.length() - 3, 3, "out", 0, 3);
 	}
 	else{
 		cout << "Enter name of file to use for input: ";
@@ -31,45 +31,45 @@ int main(int argc, char *argv[]){
 			return 1;
 		}
 		outputName = inputName;
-		outputName.replace(outputName.length()-3, 3, "out", 0, 3);
+		outputName.replace(outputName.length() - 3, 3, "out", 0, 3);
 	}
 	ofs.open(outputName.c_str(), fstream::trunc|fstream::out);
 	if(!ofs.is_open()){
 		cout << "Could not open file " << outputName << "." << endl;
 		return 1;
-		// 1 indicates error
+		//1indicateserror
 	}
 	cout << "Outputting to " << outputName << "." << endl;
 	int testCaseNum = 1;
 	char extractN;
 	double c;
 	while(ifs.good()){
-		//run through the test cases and print  out three trees for each
+		//runthroughthetestcasesandprint outthreetreesforeach
 		OBTree<double> obt;
 		AVLTree<double> avlt;
 		//HBTree<double> hbt;
 		//HBTree<Comparable> hbt;
-		ifs  >>  c;
-		do//insert nodes int o tree
+		ifs >> c;
+		do//insertnodesint otree
 		{
 			obt.insert(c);
 			avlt.insert(c);
-			// HB_Node<double> * temp  =               new HB_Node<double>(c,  0,  0,  0,  0,  0);
-			// hbt.insert(temp,  hbt.ge  tRoot());
+			//HB_Node<double> *temp = newHB_Node<double>(c, 0, 0, 0, 0, 0);
+			//hbt.insert(temp, hbt.getRoot());
 		}
-		while((ifs.peek()! = '\n') && (ifs >> c));
+		while((ifs.peek()!='\n') && (ifs >> c));
 		cout << "T E S T C A S E: " << testCaseNum << endl << endl;
 		ofs << "TEST CASE: " << testCaseNum << endl << endl;
 		prettyprint (obt.getRoot(), " ", " <");
-		//print  the OBTree
+		//print theOBTree
 		cout << endl;
 		ofs << endl;
 		prettyprint (avlt.getRoot(), " ", " <");
-		//print  the AVLTree
+		//print theAVLTree
 		cout << endl;
 		ofs << endl;
-		// prett        yprint (hbt.getRoot(),  " ",  " <");
-		  //print  the HBTree
+		//prettyprint (hbt.getRoot(), " ", " <");
+		//print theHBTree
 		//cout << endl;
 		//ofs << endl;
 		++testCaseNum;

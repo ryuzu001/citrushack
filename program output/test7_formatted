@@ -1,0 +1,260 @@
+#include <iostream>
+#include <fstream>
+#include <vector>
+#include <utility>	//#include <algorithm>
+#include <cmath> usingnamespacestd;
+template<typenameT> voidinsertRight(vector<T> &a, unsignedp, unsignedl){
+	Ttemp;
+	while(p<=l && a.at(p)<a.at(p - 1)){
+		//Swapa.at(p) anda.at(p - 1)
+		temp = a.at(p);
+		a.at(p) = a.at(p - 1);
+		a.at(p - 1) = temp;
+		++p;
+	}
+}
+template<typenameT> voidRInsertionSort(vector<T> &a, unsignedblockStart, unsignedblockEnd){
+	//unsignedblockEnd = blockStart + s;
+	//for(int p = blockEnd - 1;
+	p > 0;
+	--p){
+		
+		//Ttmp = move(a.at(p));
+		//int j;
+		//for(int j = p;
+		j<blockEnd && tmp> a.at(j + 1);
+		++j){
+			
+			//a.at(j) = move(a.at(j + 1));
+			/}
+		
+		//a.at(j) = move(tmp);
+		/}
+	
+	unsignedz = 0;
+	//unsignedj = 0;
+	//Ttemp;
+	//Temporaryvariableforswap
+	for(z = blockEnd;
+	z > 0;
+	--z){
+		//j = z;
+		//Inserta.at(i) int osortedpart
+		//stoppingoncea.at(i) incorrectposition
+		insertRight(a, z, blockEnd);
+	}
+}
+template<typenameT> voidSquareSort(vector<T> &v){
+	int b = static_cast<int >(sqrt(v.size()));
+	int s = static_cast<int >(v.size() / b);
+	vector<unsigned> left;
+	for(unsignedx = 0, y = 0;
+	x<=b;
+	y+=s, ++x){
+		left.push_back(y);
+	}
+	for(unsigneds = 0;
+	s<left.size();
+	++s){
+		if(s == left.size() - 1){
+			RInsertionSort(v, left.at(s), v.size() - 1);
+		}
+		else{
+			RInsertionSort(v, left.at(s), left.at(s + 1) - 1);
+		}
+	}
+	unsignedminIndex = 0;
+	unsignedcurrentBlock = 0;
+	for(unsignedt = 0;
+	t<v.size();
+	++t){
+		for(unsignedr = 0;
+		r<left.size();
+		++r){
+			if(t>=left.at(r) && t<left.at(r + 1)){
+				currentBlock = r;
+			}
+		}
+		minIndex = t;
+		for(unsignedu = currentBlock;
+		u<left.size();
+		++u){
+			if(v.at(minIndex)<v.at(left.at(u))){
+				minIndex = u;
+			}
+		}
+		Ttemp = v.at(minIndex);
+		v.at(minIndex) = v.at(t);
+		v.at(t) = temp;
+		if(currentBlock<left.size() - 1){
+			insertRight(v, minIndex, left.at(currentBlock + 1) - 1);
+		}
+		else{
+			insertRight(v, minIndex, v.size() - 1);
+		}
+	}
+}
+classFraction{
+	int gcd(int a, int b){
+		return b == 0?a:gcd(b, a % b);
+	}
+	int n, d;
+	public:Fraction(int n, int d = 1):n(n / gcd(n, d)), d(d / gcd(n, d)){
+	}
+	int num() const{
+		return n;
+	}
+	int den() const{
+		return d;
+	}
+	Fraction &operator*=(constFraction &rhs){
+		int new_n = n*rhs.n / gcd(n*rhs.n, d*rhs.d);
+		d = d*rhs.d / gcd(n*rhs.n, d*rhs.d);
+		n = new_n;
+		return *this;
+	}
+};
+ostream &operator << (ostream &out, constFraction &f){
+	return out << f.num() << '/' << f.den();
+}
+booloperator == (constFraction &lhs, constFraction &rhs){
+	return ((lhs.num()*rhs.den()) == (rhs.num()*lhs.den()));
+}
+booloperator<(constFraction &lhs, constFraction &rhs){
+	return (lhs.num()*rhs.den()<rhs.num()*lhs.den());
+}
+booloperator>(constFraction &lhs, constFraction &rhs){
+	return (lhs.num()*rhs.den()> rhs.num()*lhs.den());
+}
+Fractionoperator*(Fractionlhs, constFraction &rhs){
+	return lhs*=rhs;
+}
+int main(int argc, char *argv[]){
+	ifstreamifs;
+	ofstreamofs;
+	stringinputName = "";
+	//inputfile'sname
+	stringoutputName = "";
+	//outputfile'sname
+	if(argc > 1){
+		cout << "Opening file " << argv[1] << "." << endl;
+		ifs.open(argv[1]);
+		if(!ifs.is_open()){
+			cout << "Could not open file " << argv[1] << "." << endl;
+			return 1;
+		}
+		outputName = argv[1];
+		outputName.replace(outputName.length() - 3, 3, "out", 0, 3);
+	}
+	else{
+		cout << "Enter name of file to use for input: ";
+		cin >> inputName;
+		cout << endl;
+		cout << "Opening file " << inputName << "." << endl;
+		ifs.open(inputName.c_str());
+		if(!ifs.is_open()){
+			cout << "Could not open file " << inputName << "." << endl;
+			return 1;
+		}
+		outputName = inputName;
+		outputName.replace(outputName.length() - 3, 3, "out", 0, 3);
+	}
+	ofs.open(outputName.c_str(), fstream::trunc|fstream::out);
+	if(!ofs.is_open()){
+		cout << "Could not open file " << outputName << "." << endl;
+		return 1;
+		//1indicateserror
+	}
+	cout << "Outputting to " << outputName << "." << endl;
+	char type;
+	int i;
+	int numerator, denominator;
+	vector<int > vis;
+	//int vectortobesortedwithsquaresort
+	vector<int > vic;
+	//int vectortobesortedwithcubicsort
+	vector<Fraction> vfs;
+	//Fractionvectortobesortedwithsquaresort
+	vector<Fraction> vfc;
+	//Fractionvectortobesortedwithcubicsort
+	while(ifs.good()){
+		ifs >> type;
+		if(type == 'i'){
+			while(ifs >> i){
+				vis.push_back(i);
+			}
+			vic = vis;
+			//squaresort
+			SquareSort(vis);
+			//outputtoterminal
+			cout << "i" << endl;
+			for(unsignedz = 0;
+			z<vis.size();
+			++z){
+				if(z == vis.size() - 1){
+					cout << vis.at(z);
+				}
+				else{
+					cout << vis.at(z) << " ";
+				}
+			}
+			cout << endl;
+			//outputtofile
+			ofs << "i" << endl;
+			for(unsignedz = 0;
+			z<vis.size();
+			++z){
+				if(z == vis.size() - 1){
+					ofs << vis.at(z);
+				}
+				else{
+					ofs << vis.at(z) << " ";
+				}
+			}
+			cout << endl;
+			//cubicsort
+			//outputtoterminal
+			//outputtofile
+		}
+		else{
+			while(ifs >> numerator >> denominator){
+				vfs.push_back(Fraction(numerator, denominator));
+			}
+			vfc = vfs;
+			//squaresort
+			//SquareSort(vfs);
+			//outputtoterminal
+			cout << "f" << endl;
+			for(unsignedz = 0;
+			z<vfs.size();
+			++z){
+				if(z == vfs.size() - 1){
+					cout << vfs.at(z);
+				}
+				else{
+					cout << vfs.at(z) << " ";
+				}
+			}
+			cout << endl;
+			//outputtofile
+			ofs << "f" << endl;
+			for(unsignedz = 0;
+			z<vfs.size();
+			++z){
+				if(z == vfs.size() - 1){
+					ofs << vfs.at(z);
+				}
+				else{
+					ofs << vfs.at(z) << " ";
+				}
+			}
+			ofs << endl;
+			//cubicsort
+			//outputtoterminal
+			//outputtofile
+		}
+	}
+	ifs.close();
+	ofs.close();
+	return 0;
+}

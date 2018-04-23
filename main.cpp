@@ -21,7 +21,7 @@ string removeWhiteSpace(const string original) {
         if(pos > 0) {
             pos--;
         }
-        pos = modified.find(' ', pos);
+        pos = modified.find(' ', pos);  // update position of space char
     }
     
     return modified;
@@ -49,7 +49,7 @@ string removeNewlines(const string original){
         pos = modified.find('\n', pos);
         
     }
-    lastLine = modified.substr(last_pos, modified.size() - last_pos);
+    lastLine = modified.substr(last_pos, modified.size() - last_pos);   // add last part 
     
     ss << lastLine;
     
@@ -80,7 +80,7 @@ void writeFile(string str){                 // writes file
     string nof_f;
     size_t per = nof.find(".");             // file extension
     if(per != string::npos){
-        nof_f = nof.substr(0, per) + formatted + nof.substr(per, nof.size() - per);
+        nof_f = nof.substr(0, per) + formatted + nof.substr(per, nof.size() - per); // nameoffile_formatted.txt
     }
     else{
         nof_f = nof + formatted;      // nameoffile_formatted       w/ no extension
@@ -121,7 +121,7 @@ string preserveQuotes(string str){      // preserves quotes, and any comment // 
             p3 = removeWhiteSpace(p3);                  // not in quote, so remove whitespace.
             returnStuff += p3;
         }
-        p4 = str.substr(pos2, str.size() - pos);
+        p4 = str.substr(pos2, str.size() - pos);        // last part - between last quotation and eof
         p4 = removeWhiteSpace(p4);
         returnStuff += p4;
     }
@@ -130,6 +130,10 @@ string preserveQuotes(string str){      // preserves quotes, and any comment // 
     }
     return returnStuff;
 }
+
+/* My attempt at preserving both quotations and comments - does not work */
+
+
 // string preserveQuotes(string str){      // preserves quotes, and any comment //
 //     string returnStuff = "";
 //     string p1 = "";
@@ -205,7 +209,7 @@ string preserveQuotes(string str){      // preserves quotes, and any comment // 
 // }
 
 
-string format(const string &s) {
+string format(const string &s) {            // each case for formatting the string
     int numTabs = 0;
     string str = s;
     for(unsigned p = 0; p < str.length(); p++) {
@@ -215,13 +219,13 @@ string format(const string &s) {
             return str;
         }
         
-        if(str.at(p) == '=') {
+        if(str.at(p) == '=') {              // ==
             if(str.at(p + 1) == '=') {
                 str.insert(p, " ");
                 p++;
                 str.insert(p + 2, " ");
             }
-            else if(!(str.at(p - 1) == '=' || str.at(p - 1) == '<'
+            else if(!(str.at(p - 1) == '=' || str.at(p - 1) == '<'          //=...
                   || str.at(p - 1) == '>' || str.at(p - 1) == '+'
                   || str.at(p - 1) == '-' || str.at(p - 1) == '*'
                   || str.at(p - 1) == '/' || str.at(p - 1) == '%'
@@ -235,7 +239,7 @@ string format(const string &s) {
             }
         }
         
-        if(str.at(p) == '*') { 
+        if(str.at(p) == '*') {                  // *...
             if((isdigit(str.at(p + 1)) && isalpha(str.at(p - 1))) || 
                (isdigit(str.at(p - 1)) && isalpha(str.at(p + 1))) ||
                (isdigit(str.at(p - 1)) && isdigit(str.at(p + 1))) ) { // j*1 or 1*j or 1*1
@@ -249,7 +253,7 @@ string format(const string &s) {
             // }
         } 
         
-        if(str.at(p) == '/') {
+        if(str.at(p) == '/') {                  // /...
             if((isdigit(str.at(p + 1)) && isalpha(str.at(p - 1))) || // j/1
                (isdigit(str.at(p - 1)) && isalpha(str.at(p + 1))) || // 1/j
                (isdigit(str.at(p - 1)) && isdigit(str.at(p + 1))) || // 1/1
@@ -262,7 +266,7 @@ string format(const string &s) {
             }
         }
         
-        if(str.at(p) == '+') {
+        if(str.at(p) == '+') {                  // +...
             if((isdigit(str.at(p + 1)) && isalpha(str.at(p - 1))) || // j+1
                (isdigit(str.at(p - 1)) && isalpha(str.at(p + 1))) || // 1+j
                (isdigit(str.at(p - 1)) && isdigit(str.at(p + 1))) || // 1+1
@@ -417,7 +421,7 @@ string format(const string &s) {
             }
         }
         
-        if(str.at(p) == ',') {
+        if(str.at(p) == ',') {          // space after ,
             str.insert(p + 1, " ");
         }
         
@@ -439,7 +443,7 @@ string format(const string &s) {
     return str;
 }
 
-string removeAllWhitespace(){
+string removeAllWhitespace(){       // calls functions to open file and remove whitespace
 	string t = openFile();
 	t = removeNewlines(t);
 	t = preserveQuotes(t);
