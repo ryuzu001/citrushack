@@ -17,12 +17,19 @@ performs.
 _____________________________
 
 `test1` Big general test. Completely spaghetti-fied code that is not easy to read and contains quotations and comments galore.
+
 `test2` A (failed) test that should preserve the spaces in both comments and quotes
+
 `test3` Spaghetti-fied "Hello World" program
+
 `test4` A program with no strings. Only comments, shows a bug with the way comments are handled.
+
 `test5` "Hello World" on one line
+
 `test6` "Hello World" on many lines
+
 `test7` `test8` and `test9` are general catch-all tests. 
+
 `test10.cpp` is a general test, with the case of testing if the outputted file is named correctly as well.
 
 _____________
@@ -46,14 +53,14 @@ those comments was our downfall. You can check the commented code in `main.cpp` 
 both comments and strings.
 
 User Declared types are difficult to maintain. Our code as it stands does not respect user declared types. See this code from
-test 8:
+test8_formatted:
 
     cout << "Enter number of deals (simulations): ";
 	cin >> deals;
 	cout << endl << endl;
 	DecktempDeck;
 
-This should be `Deck tempDeck` due to the user defined `Deck`. This is also evident by the top of test 8 as well, 
+This should be `Deck tempDeck` due to the user defined `Deck`. This is also evident by the top of test8_formatted as well, 
 
     #include"Deck.h"#include <ostream>
     #include <vector>
@@ -76,4 +83,4 @@ In addition, other challenges arose from `for` loops, `do while` loops and `/*  
 - User defined types are not preserved (See above)
 - Multiline comments are ignored
 - Including things other than standard classes results in a spacing error
-- Use of the `<` or `>` characters can mess with formatting `i<a.size();` or `vector<int> v;`
+- Use of the `<` or `>` characters can mess with formatting `i < a.size();` or `vector<int> v;`
